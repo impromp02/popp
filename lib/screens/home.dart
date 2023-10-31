@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:popp/models/memo.dart';
 import 'package:popp/services/memo_service.dart';
+import 'package:popp/widgets/item_card.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,6 +22,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: FutureBuilder(
           future: futureMemos,
           builder: (context, snapshot) {
@@ -29,14 +31,10 @@ class _HomeState extends State<Home> {
             } else {
               if (snapshot.hasData) {
                 return ListView.builder(
-                    itemCount: 4,
+                    itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
-                      print(index);
                       final item = snapshot.data![index];
-                      return ListTile(
-                        title: Text(item.title),
-                        subtitle: Text(item.url),
-                      );
+                      return ItemCard(item: item);
                     });
               } else {
                 throw Exception('Failed to load memos data.');
