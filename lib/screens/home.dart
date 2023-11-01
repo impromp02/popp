@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:popp/models/memo.dart';
 import 'package:popp/services/memo_service.dart';
@@ -27,15 +29,11 @@ class _HomeState extends State<Home> {
           future: futureMemos,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator.adaptive();
+              return const Center(child: CircularProgressIndicator.adaptive());
             } else {
               if (snapshot.hasData) {
-                return ListView.builder(
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      final item = snapshot.data![index];
-                      return ItemCard(item: item);
-                    });
+                final item = snapshot.data?[1];
+                return ItemCard(item: item!);
               } else {
                 throw Exception('Failed to load memos data.');
               }

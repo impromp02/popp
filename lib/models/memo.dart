@@ -1,12 +1,16 @@
+import 'dart:typed_data';
+
 class MemoModel {
   final int id;
   final String title;
   final String url;
   final String source;
   final int dateAdded;
-  final int dateLastUsed;
+  final int? dateLastUsed;
   final bool flagged;
   final String mediaType;
+  final String? description;
+  final Uint8List? image;
 
   const MemoModel(
       {required this.id,
@@ -14,11 +18,18 @@ class MemoModel {
       required this.url,
       required this.source,
       required this.dateAdded,
-      required this.dateLastUsed,
+      this.dateLastUsed,
       required this.flagged,
-      required this.mediaType});
+      required this.mediaType,
+      this.description,
+      this.image});
 
   factory MemoModel.fromJson(Map<String, dynamic> json) {
+    final List<dynamic>? byteArray = json['image']?['data'];
+    final List<int> intArray =
+        byteArray?.map((e) => int.parse(e.toString())).toList() ?? List.empty();
+    final Uint8List buff = Uint8List.fromList(intArray);
+
     return MemoModel(
       id: json['id'],
       title: json['title'],
@@ -28,6 +39,8 @@ class MemoModel {
       dateLastUsed: json['dateLastUsed'],
       flagged: json['flagged'],
       mediaType: json['mediaType'],
+      description: json['description'],
+      image: buff,
     );
   }
 }
